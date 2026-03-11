@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 226 21% 5%;
+    --foreground: 38 30% 90%;
+    --card: 227 19% 10%;
+    --card-foreground: 38 30% 90%;
+    --popover: 227 20% 12%;
+    --popover-foreground: 38 30% 90%;
+    --primary: 39 48% 61%;
+    --primary-foreground: 226 21% 5%;
+    --secondary: 227 19% 14%;
+    --secondary-foreground: 38 30% 90%;
+    --muted: 227 19% 14%;
+    --muted-foreground: 29 15% 55%;
+    --accent: 39 48% 61%;
+    --accent-foreground: 226 21% 5%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 38 29% 98%;
+    --border: 227 19% 18%;
+    --input: 227 19% 18%;
+    --ring: 39 48% 61%;
+    --radius: 0rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased custom-scrollbar;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+}
+
+/* ── Global Precision Scrollbar ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.2) transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.2);
+  border-radius: 0px;
+  transition: all 0.3s ease;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* ── Custom Animations ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Luxury Utilities ── */
+.glass-panel {
+  @apply bg-card/95 backdrop-blur-xl border border-white/5;
+}
+
+.gold-glow {
+  box-shadow: 0 0 20px rgba(201, 169, 110, 0.05);
+}
+
+.gold-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(201, 169, 110, 0.15);
+}
+
+/* Custom utility for specific components if needed */
+.custom-scrollbar-alt::-webkit-scrollbar {
+  width: 2px;
+}
+.custom-scrollbar-alt::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.custom-scrollbar-alt::-webkit-scrollbar-thumb {
+  @apply bg-primary/40 rounded-none;
+}
+
+/* ── Scroll-hint bounce animation ── */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-5px);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* ── Hide scrollbar but keep scroll functionality ── */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
