@@ -125,10 +125,9 @@ function ShoppingListing() {
     });
   }
 
+  // 1. Initial Load: Load sort and filters from URL or Session
   useEffect(() => {
     setSort("title-atoz");
-    
-    // Check if we have filters in URL first (for direct links/navigation)
     const categoryFromUrl = searchParams.get("category");
     const collectionFromUrl = searchParams.get("collection");
     
@@ -137,26 +136,29 @@ function ShoppingListing() {
       if (categoryFromUrl) initialFilters.category = categoryFromUrl.split(",");
       if (collectionFromUrl) initialFilters.collection = collectionFromUrl.split(",");
     } else {
-      // Fallback to session storage
-      initialFilters = JSON.parse(sessionStorage.getItem("filters")) || {};
+      const storedFilters = sessionStorage.getItem("filters");
+      if (storedFilters) initialFilters = JSON.parse(storedFilters);
     }
     
     setFilters(initialFilters);
-  }, [searchParams]);
+  }, []); // Only on mount
 
+  // 2. When filters/sort change, fetch data and update URL
   useEffect(() => {
-    if (filters && Object.keys(filters).length > 0) {
+    if (filters !== null && sort !== null) {
+      // Fetch products
+      dispatch(fetchAllFilteredProducts({ filterParams: filters, sortParams: sort }));
+      
+      // Update URL and SessionStorage
       const createQueryString = createSearchParamsHelper(filters);
-      setSearchParams(new URLSearchParams(createQueryString));
+      if (createQueryString) {
+        setSearchParams(new URLSearchParams(createQueryString));
+      } else {
+        setSearchParams(new URLSearchParams());
+      }
+      sessionStorage.setItem("filters", JSON.stringify(filters));
     }
-  }, [filters]);
-
-  useEffect(() => {
-    if (filters !== null && sort !== null)
-      dispatch(
-        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
-      );
-  }, [dispatch, sort, filters]);
+  }, [filters, sort, dispatch]);
 
 
   return (
