@@ -81,7 +81,7 @@ Ready to run! Start both servers and register your account.
 stock managment type in admin panel 
 accesory (pagri, mala, button)
 keyboard the input dheke dicche
-
+maybe: login the shoraite hobe direct shop show korbe
 
 hoyeche: after login black screen showing means the loading don't show that use youtube techniqe where they don't load the data but show like dummy item
 

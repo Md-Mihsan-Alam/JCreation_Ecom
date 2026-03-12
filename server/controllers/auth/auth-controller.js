@@ -72,8 +72,9 @@ const loginUser = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
+      secure: true, // Always true for HTTPS (Render/Vercel)
+      sameSite: "none", // Required for cross-site cookies
+      maxAge: 3600000, // 1 hour
     }).json({
       success: true,
       message: "Logged in successfully",
@@ -96,11 +97,10 @@ const loginUser = async (req, res) => {
 //logout
 
 const logoutUser = (req, res) => {
-  const isProduction = process.env.NODE_ENV === "production";
   res.clearCookie("token", {
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
+    secure: true,
+    sameSite: "none",
   }).json({
     success: true,
     message: "Logged out successfully!",
