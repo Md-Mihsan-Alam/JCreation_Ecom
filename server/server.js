@@ -26,16 +26,31 @@ mongoose
   .catch((error) => console.log("MongoDB connection error:", error.message));
 
 const app = express();
+app.set("trust proxy", 1); // Required for secure cookies on Render/Vercel
 const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: [
-      process.env.CLIENT_BASE_URL,
-      "http://localhost:5173",
-      "https://jcreation-ecom.onrender.com", // Add the render URL itself just in case it's used for both
-    ].filter(Boolean),
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        process.env.CLIENT_BASE_URL,
+        "http://localhost:5173",
+        "https://j-creation-ecom.vercel.app",
+        "https://jcreation-ecom.onrender.com",
+      ];
+      
+      const isVercelOrigin = origin && (
+        origin.endsWith(".vercel.app") || 
+        origin.includes("vercel.app")
+      );
+
+      if (!origin || allowedOrigins.indexOf(origin) !== -1 || isVercelOrigin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
       "Authorization",
