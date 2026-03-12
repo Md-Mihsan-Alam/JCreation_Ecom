@@ -82,6 +82,7 @@ stock managment type in admin panel
 accesory (pagri, mala, button)
 keyboard the input dheke dicche
 maybe: login the shoraite hobe direct shop show korbe
+main url theke ektu samne gele 404 dekhay so oita thik korte hobe
 
 hoyeche: after login black screen showing means the loading don't show that use youtube techniqe where they don't load the data but show like dummy item
 
