@@ -240,37 +240,44 @@ function ShoppingListing() {
         {(filters.category &&
           filters.category.length > 0 &&
           (filters.category.includes("women") ||
-            filters.category.includes("kids"))) ||
-        categorySearchParam === "women" ||
-        categorySearchParam === "kids" ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px] sm:min-h-[600px] w-full bg-card/50 rounded-none border border-dashed border-white/5 p-6 sm:p-12 text-center animate-in fade-in zoom-in duration-700">
-            <div className="mb-4 sm:mb-8">
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.6em] text-primary font-bold">
-                Exquisite Collection
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-foreground uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 leading-tight">
-              Coming Soon
-            </h2>
-            <div className="h-[1px] w-16 sm:w-24 bg-primary/20 mb-6 sm:mb-8" />
-            <p className="text-muted-foreground text-[10px] sm:text-[12px] uppercase tracking-[0.2em] font-medium max-w-lg leading-relaxed italic opacity-80">
-              We are currently curating the{" "}
-              <span className="text-primary font-bold">
-                {(filters?.category?.includes("women") || categorySearchParam === "women") ? "Women's" : "Kids'"}
-              </span>{" "}
-              anthology. Our artisans are crafting pieces where heritage meets modern grace.
-            </p>
-            <div className="mt-8 sm:mt-12">
-              <Button 
-                variant="outline" 
-                className="rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-500 uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] px-6 sm:px-10 py-5 sm:py-7 shadow-2xl shadow-primary/10"
-                onClick={() => {
-                  setFilters({ category: ['men'] });
-                  sessionStorage.setItem("filters", JSON.stringify({ category: ['men'] }));
-                }}
-              >
-                Inaugurate Men's Gallery
-              </Button>
+            filters.category.includes("kids") ||
+            filters.category.includes("accessories"))) ||
+        ["women", "kids", "accessories"].includes(categorySearchParam) ? (
+          <div className="p-4 md:p-6 lg:p-10 w-full animate-in fade-in zoom-in duration-700">
+            <div className="flex flex-col items-center justify-center min-h-[400px] sm:min-h-[600px] w-full max-w-[1200px] mx-auto bg-card/30 rounded-none border border-dashed border-white/5 p-6 sm:p-12 text-center">
+              <div className="mb-4 sm:mb-8">
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.6em] text-primary font-bold">
+                  Exquisite Selection
+                </span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-foreground uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 leading-tight">
+                Coming Soon
+              </h2>
+              <div className="h-[1px] w-16 sm:w-24 bg-primary/20 mb-6 sm:mb-8" />
+              <p className="text-muted-foreground text-[10px] sm:text-[12px] uppercase tracking-[0.2em] font-medium max-w-lg leading-relaxed italic opacity-80">
+                We are currently curating the{" "}
+                <span className="text-primary font-bold">
+                  {categorySearchParam === "women" || filters?.category?.includes("women") 
+                    ? "Women's" 
+                    : categorySearchParam === "kids" || filters?.category?.includes("kids") 
+                    ? "Kids'" 
+                    : "Accessories"}
+                </span>{" "}
+                anthology. Our artisans are crafting pieces where heritage meets modern grace.
+              </p>
+              <div className="mt-8 sm:mt-12">
+                <Button 
+                  variant="outline" 
+                  className="rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-500 uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] px-6 sm:px-10 py-5 sm:py-7 shadow-2xl shadow-primary/10"
+                  onClick={() => {
+                    setFilters({ category: ['men'] });
+                    sessionStorage.setItem("filters", JSON.stringify({ category: ['men'] }));
+                    setSearchParams(new URLSearchParams("category=men"));
+                  }}
+                >
+                  Inaugurate Men's Gallery
+                </Button>
+              </div>
             </div>
           </div>
         ) : (
