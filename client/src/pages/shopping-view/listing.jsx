@@ -16,11 +16,11 @@ import {
   fetchAllFilteredProducts,
   fetchProductDetails,
 } from "@/store/shop/products-slice";
-import { ArrowUpDownIcon } from "lucide-react";
+import { ArrowUpDownIcon, Filter, HomeIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { HomeIcon } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
@@ -52,6 +52,7 @@ function ShoppingListing() {
   const { toast } = useToast();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [detailsMode, setDetailsMode] = useState("full-details");
+  const [openFilterSheet, setOpenFilterSheet] = useState(false);
 
   const categorySearchParam = searchParams.get("category");
 
@@ -126,7 +127,21 @@ function ShoppingListing() {
 
   useEffect(() => {
     setSort("title-atoz");
-    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
+    
+    // Check if we have filters in URL first (for direct links/navigation)
+    const categoryFromUrl = searchParams.get("category");
+    const collectionFromUrl = searchParams.get("collection");
+    
+    let initialFilters = {};
+    if (categoryFromUrl || collectionFromUrl) {
+      if (categoryFromUrl) initialFilters.category = categoryFromUrl.split(",");
+      if (collectionFromUrl) initialFilters.collection = collectionFromUrl.split(",");
+    } else {
+      // Fallback to session storage
+      initialFilters = JSON.parse(sessionStorage.getItem("filters")) || {};
+    }
+    
+    setFilters(initialFilters);
   }, [searchParams]);
 
   useEffect(() => {
@@ -145,44 +160,71 @@ function ShoppingListing() {
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
-      <ProductFilter filters={filters} handleFilter={handleFilter} />
-      <div className="bg-background w-full rounded-lg shadow-sm">
-        <div className="p-4 border-b border-white/5 flex items-center justify-between bg-card/30 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] lg:grid-cols-[250px_1fr] gap-6 p-4 md:p-6 lg:max-w-[1600px] lg:mx-auto">
+      {/* Desktop Filter Sidebar */}
+      <aside className="hidden md:block">
+        <ProductFilter filters={filters} handleFilter={handleFilter} />
+      </aside>
+
+      <div className="bg-background w-full">
+        <div className="p-4 border-b border-white/5 flex items-center justify-between bg-card/30 backdrop-blur-sm sticky top-16 z-10 sm:relative sm:top-0 h-14 md:h-16">
+          <div className="flex items-center gap-2 sm:gap-3">
+             {/* Mobile Filter Trigger */}
+             <Sheet open={openFilterSheet} onOpenChange={setOpenFilterSheet}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="md:hidden border-primary/20 bg-transparent text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-widest text-[10px] font-bold">
+                    <Filter className="h-4 w-4 mr-1" />
+                    <span>Filter</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-[300px] bg-card p-0">
+                   <div className="p-6">
+                      <ProductFilter filters={filters} handleFilter={handleFilter} />
+                      <Button 
+                        className="w-full mt-6 rounded-none uppercase tracking-widest text-[10px] font-bold h-12"
+                        onClick={() => setOpenFilterSheet(false)}
+                      >
+                        Examine Anthology
+                      </Button>
+                   </div>
+                </SheetContent>
+             </Sheet>
+
             <Button
               variant="ghost"
               size="sm"
-              className="flex items-center gap-1 font-bold text-primary hover:text-primary hover:bg-white/10 uppercase tracking-widest text-[11px] transition-all"
+              className="hidden sm:flex items-center gap-1 font-bold text-primary hover:text-primary hover:bg-white/10 uppercase tracking-widest text-[11px] transition-all"
               onClick={() => navigate("/shop/home")}
             >
-              <HomeIcon className="h-4 w-4" />
+              <HomeIcon className="h-3 w-3 sm:h-4 sm:w-4" />
               Home
             </Button>
-            <span className="text-white/10">|</span>
-            <h2 className="text-[14px] font-bold uppercase tracking-[0.2em] text-foreground">Our Selection</h2>
+            <span className="hidden sm:inline text-white/10">|</span>
+            <h2 className="text-[11px] sm:text-[14px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.2em] text-foreground">Our Selection</h2>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-muted-foreground">
-              {productList?.length} Products
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="text-[10px] sm:text-[12px] text-muted-foreground uppercase tracking-widest">
+              {productList?.length} Pieces
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-2 border-white/10 bg-transparent text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-none uppercase tracking-widest text-[10px] font-bold"
+                  className="flex items-center gap-1 sm:gap-2 border-white/10 bg-transparent text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-none uppercase tracking-widest text-[9px] sm:text-[10px] font-bold px-2 sm:px-4"
                 >
-                  <ArrowUpDownIcon className="h-4 w-4" />
-                  <span>Sort By</span>
+                  <ArrowUpDownIcon className="h-3 w-3 sm:h-4 sm:w-4" />
+                  <span>Sort</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
+              <DropdownMenuContent align="end" className="w-[180px] sm:w-[200px] bg-card border-white/5 rounded-none shadow-2xl">
                 <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
                   {sortOptions.map((sortItem) => (
                     <DropdownMenuRadioItem
                       value={sortItem.id}
                       key={sortItem.id}
+                      className="text-[11px] uppercase tracking-widest py-3 cursor-pointer focus:bg-white/5 font-bold"
                     >
                       {sortItem.label}
                     </DropdownMenuRadioItem>
@@ -192,33 +234,34 @@ function ShoppingListing() {
             </DropdownMenu>
           </div>
         </div>
+
         {(filters.category &&
           filters.category.length > 0 &&
           (filters.category.includes("women") ||
             filters.category.includes("kids"))) ||
         categorySearchParam === "women" ||
         categorySearchParam === "kids" ? (
-          <div className="flex flex-col items-center justify-center min-h-[600px] w-full bg-card/50 rounded-none border border-dashed border-white/5 p-12 text-center animate-in fade-in zoom-in duration-700">
-            <div className="mb-8">
-              <span className="text-[10px] uppercase tracking-[0.6em] text-primary font-bold">
+          <div className="flex flex-col items-center justify-center min-h-[400px] sm:min-h-[600px] w-full bg-card/50 rounded-none border border-dashed border-white/5 p-6 sm:p-12 text-center animate-in fade-in zoom-in duration-700">
+            <div className="mb-4 sm:mb-8">
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.6em] text-primary font-bold">
                 Exquisite Collection
               </span>
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold text-foreground uppercase tracking-[0.3em] mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-foreground uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 leading-tight">
               Coming Soon
             </h2>
-            <div className="h-[1px] w-24 bg-primary/20 mb-8" />
-            <p className="text-muted-foreground text-[12px] uppercase tracking-[0.2em] font-medium max-w-lg leading-relaxed italic opacity-80">
+            <div className="h-[1px] w-16 sm:w-24 bg-primary/20 mb-6 sm:mb-8" />
+            <p className="text-muted-foreground text-[10px] sm:text-[12px] uppercase tracking-[0.2em] font-medium max-w-lg leading-relaxed italic opacity-80">
               We are currently curating the{" "}
-              <span className="text-primary">
+              <span className="text-primary font-bold">
                 {(filters?.category?.includes("women") || categorySearchParam === "women") ? "Women's" : "Kids'"}
               </span>{" "}
               anthology. Our artisans are crafting pieces where heritage meets modern grace.
             </p>
-            <div className="mt-12">
+            <div className="mt-8 sm:mt-12">
               <Button 
                 variant="outline" 
-                className="rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-500 uppercase tracking-[0.3em] text-[10px] px-10 py-7 shadow-2xl shadow-primary/10"
+                className="rounded-none border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-500 uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] px-6 sm:px-10 py-5 sm:py-7 shadow-2xl shadow-primary/10"
                 onClick={() => {
                   setFilters({ category: ['men'] });
                   sessionStorage.setItem("filters", JSON.stringify({ category: ['men'] }));
@@ -229,7 +272,7 @@ function ShoppingListing() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
             {productList && productList.length > 0
                 ? productList.map((productItem) => (
                     <ShoppingProductTile

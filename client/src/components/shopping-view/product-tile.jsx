@@ -38,66 +38,66 @@ function ShoppingProductTile({
     <Card className="w-full max-w-sm mx-auto group border-0 shadow-none bg-transparent">
       <div>
         <div 
-          className="relative overflow-hidden cursor-pointer h-[450px]" 
+          className="relative overflow-hidden cursor-pointer h-[350px] sm:h-[400px] lg:h-[450px]" 
           onClick={() => navigate(`/shop/${product?.category || 'collection'}/${product?.brand || 'all'}/${product?._id}`)}
         >
           <img
             src={product?.image}
             alt={product?.title}
-            className="w-full h-full object-cover rounded-none transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover rounded-none transition-transform duration-700 lg:group-hover:scale-110"
           />
 
           {/* Right Action Buttons */}
-          <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <div className="absolute top-2 right-2 sm:top-4 sm:right-4 flex flex-col gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity z-10">
             <Button
               variant="outline"
-              className="bg-card/90 hover:bg-primary hover:text-primary-foreground text-foreground w-10 h-10 rounded-none border-white/5 shadow-lg flex items-center justify-center p-0 transition-all duration-300"
+              className="bg-card/90 hover:bg-primary hover:text-primary-foreground text-foreground w-9 h-9 sm:w-10 sm:h-10 rounded-none border-white/5 shadow-lg flex items-center justify-center p-0 transition-all duration-300"
               onClick={(e) => {
                 e.stopPropagation();
                 dispatch(toggleWishlistItem(product));
               }}
             >
-              <Heart className={`w-5 h-5 transition-colors ${isWishlisted ? "fill-current" : ""}`} />
+              <Heart className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors ${isWishlisted ? "fill-current" : ""}`} />
             </Button>
             <Button
               variant="outline"
-              className="bg-card/90 hover:bg-primary hover:text-primary-foreground text-foreground w-10 h-10 rounded-none border-white/5 shadow-lg flex items-center justify-center p-0 transition-all duration-300"
+              className="bg-card/90 hover:bg-primary hover:text-primary-foreground text-foreground w-9 h-9 sm:w-10 sm:h-10 rounded-none border-white/5 shadow-lg flex items-center justify-center p-0 transition-all duration-300"
               onClick={(e) => {
                 e.stopPropagation();
                 handleGetProductDetails(product?._id, "full-details");
               }}
             >
-              <Eye className="w-5 h-5" />
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </div>
 
           {/* Bottom Quick Shop & Sizes Hover Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 flex flex-col items-center justify-end gap-3 h-1/2 rounded-none pointer-events-none">
+          <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity z-10 flex flex-col items-center justify-end gap-2 sm:gap-3 h-1/2 rounded-none pointer-events-none">
             
-            <div className="text-white text-[15px] font-semibold tracking-wider drop-shadow-md pb-1 pointer-events-auto">
+            <div className="text-white text-[13px] sm:text-[15px] font-semibold tracking-wider drop-shadow-md pb-1 pointer-events-auto bg-black/20 px-2 py-0.5 backdrop-blur-sm lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-none">
                 {getAvailableSizes() || "Out of Stock"}
             </div>
 
             {product?.totalStock > 0 ? (
               <Button
-                className="w-3/4 max-w-[200px] bg-primary text-primary-foreground hover:brightness-110 font-bold pointer-events-auto rounded-none shadow-xl transition-all active:scale-95 uppercase tracking-widest text-[11px] h-11"
+                className="w-full sm:w-3/4 max-w-[200px] bg-primary text-primary-foreground hover:brightness-110 font-bold pointer-events-auto rounded-none shadow-xl transition-all active:scale-95 uppercase tracking-widest text-[10px] sm:text-[11px] h-9 sm:h-11"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleGetProductDetails(product?._id, "quick-shop");
                 }}
               >
-                <ShoppingCart className="w-4 h-4 mr-2" />
+                <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                 Quick Shop
               </Button>
             ) : (
-               <Button className="w-3/4 max-w-[200px] opacity-70 cursor-not-allowed bg-black text-white pointer-events-auto rounded-none" variant="outline">
+               <Button className="w-full sm:w-3/4 max-w-[200px] opacity-70 cursor-not-allowed bg-black text-white pointer-events-auto rounded-none text-[10px] sm:text-[11px] h-9 sm:h-11" variant="outline">
                  Out Of Stock
                </Button>
             )}
           </div>
 
           {product?.totalStock === 0 && (
-            <Badge className="absolute top-4 left-4 bg-red-500 hover:bg-red-600">
+            <Badge className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-red-500 hover:bg-red-600 rounded-none text-[10px] uppercase tracking-tighter">
               Out Of Stock
             </Badge>
           )}

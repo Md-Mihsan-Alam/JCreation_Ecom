@@ -1,3 +1,5 @@
+export const API_URL = import.meta.env.VITE_API_URL || "https://jcreation-ecom.onrender.com";
+
 export const registerFormControls = [
   {
     name: "userName",

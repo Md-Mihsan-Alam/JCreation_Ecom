@@ -43,7 +43,7 @@ function AdminOrderDetailsView({ orderDetails }) {
   }
 
   return (
-    <DialogContent className="sm:max-w-[600px] bg-card border-white/5 rounded-none shadow-2xl animate-fade-in-up">
+    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto bg-card border-white/5 rounded-none shadow-2xl animate-fade-in-up">
       <div className="grid gap-6 pt-6 animate-fade-in-up">
         <div className="grid gap-3">
           <div className="flex items-center justify-between border-b border-white/5 pb-2">
@@ -88,12 +88,21 @@ function AdminOrderDetailsView({ orderDetails }) {
           <div className="grid gap-4">
             <div className="text-[11px] uppercase tracking-[0.2em] text-primary font-bold">Creation Anthology</div>
             <ul className="grid gap-3">
-              {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
+                  {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
                 ? orderDetails?.cartItems.map((item) => (
                     <li className="flex items-center justify-between bg-white/5 p-3 border border-white/5 transition-all hover:border-primary/20" key={item.productId}>
-                      <div className="flex flex-col">
-                        <span className="text-[12px] font-bold uppercase tracking-wider text-foreground">{item.title}</span>
-                        <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Quantity: {item.quantity}</span>
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 border border-white/10 overflow-hidden bg-white/5">
+                          <img 
+                            src={item.image} 
+                            alt={item.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[12px] font-bold uppercase tracking-wider text-foreground">{item.title}</span>
+                          <span className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">Quantity: {item.quantity}</span>
+                        </div>
                       </div>
                       <span className="text-[12px] font-bold text-primary">Tk {item.price?.toLocaleString('en-IN')}</span>
                     </li>
@@ -125,11 +134,11 @@ function AdminOrderDetailsView({ orderDetails }) {
                 name: "status",
                 componentType: "select",
                 options: [
-                  { id: "pending", label: "Pending Anthology" },
-                  { id: "inProcess", label: "In Preparation" },
-                  { id: "inShipping", label: "In Transit" },
-                  { id: "delivered", label: "Consigned" },
-                  { id: "rejected", label: "Declined" },
+                  { id: "pending", label: "Pending" },
+                  { id: "inProcess", label: "In Process" },
+                  { id: "inShipping", label: "In Shipping" },
+                  { id: "delivered", label: "Delivered" },
+                  { id: "rejected", label: "Rejected" },
                 ],
               },
             ]}

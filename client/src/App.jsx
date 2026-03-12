@@ -24,6 +24,9 @@ import PaymentSuccessPage from "./pages/shopping-view/payment-success";
 import SearchProducts from "./pages/shopping-view/search";
 import ShoppingWishlist from "./pages/shopping-view/wishlist";
 import ProductDetailsPage from "./pages/shopping-view/product-details-page";
+import ScrollToTop from "./components/common/scroll-to-top";
+
+import LuxuryLoadingSkeleton from "./components/common/loading-skeleton";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -35,10 +38,11 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="w-[800] bg-black h-[600px]" />;
+  if (isLoading) return <LuxuryLoadingSkeleton />;
 
   return (
     <div className="flex flex-col overflow-hidden bg-background">
+      <ScrollToTop />
       <Routes>
         <Route
           path="/"

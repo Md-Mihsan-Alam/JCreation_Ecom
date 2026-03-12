@@ -4,6 +4,7 @@ import { Label } from "../ui/label";
 import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { API_URL } from "@/config";
 import { Skeleton } from "../ui/skeleton";
 
 function ProductImageUpload({
@@ -52,7 +53,7 @@ function ProductImageUpload({
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
-      "https://jcreation-ecom.onrender.com/api/admin/products/upload-image",
+      `${API_URL}/api/admin/products/upload-image`,
       data
     );
     console.log(response, "response");
