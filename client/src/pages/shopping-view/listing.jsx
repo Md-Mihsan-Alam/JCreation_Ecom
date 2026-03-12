@@ -137,7 +137,12 @@ function ShoppingListing() {
       if (collectionFromUrl) initialFilters.collection = collectionFromUrl.split(",");
     } else {
       const storedFilters = sessionStorage.getItem("filters");
-      if (storedFilters) initialFilters = JSON.parse(storedFilters);
+      if (storedFilters) {
+        initialFilters = JSON.parse(storedFilters);
+      } else {
+        // Default to Men's collection if nothing is selected
+        initialFilters = { category: ['men'] };
+      }
     }
     
     setFilters(initialFilters);
@@ -243,8 +248,8 @@ function ShoppingListing() {
             filters.category.includes("kids") ||
             filters.category.includes("accessories"))) ||
         ["women", "kids", "accessories"].includes(categorySearchParam) ? (
-          <div className="p-4 md:p-6 lg:p-10 w-full animate-in fade-in zoom-in duration-700">
-            <div className="flex flex-col items-center justify-center min-h-[400px] sm:min-h-[600px] w-full max-w-[1200px] mx-auto bg-card/30 rounded-none border border-dashed border-white/5 p-6 sm:p-12 text-center">
+          <div className="w-full animate-in fade-in zoom-in duration-700">
+            <div className="flex flex-col items-center justify-center min-h-[400px] sm:min-h-[700px] w-full bg-card/30 rounded-none border border-dashed border-white/5 p-6 sm:p-12 text-center">
               <div className="mb-4 sm:mb-8">
                 <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.6em] text-primary font-bold">
                   Exquisite Selection
